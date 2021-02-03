@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Template
+objects:
+- kind: service_log
+  severity: Info
+  service_name: Manual
+  cluster_uuid: ${CLUSTER_UUID}
+  summary: Test cluster notification basic event notification type
+  description: |
+      This is an example of a cluster log entry for test purposes.
+      This entry should have sent an email notification to the cluster owner.
+      A support case has been opened: https://access.redhat.com/support/cases/#/case/${CASE_ID}
+  internal_only: false
+parameters:
+- description: Target Cluster UUID
+  name: CLUSTER_UUID
+  required: true
+- description: access.redhat.com case ID
+  name: CASE_ID
+  required: true

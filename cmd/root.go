@@ -19,6 +19,7 @@ import (
 	"github.com/openshift/osd-utils-cli/cmd/cost"
 	"github.com/openshift/osd-utils-cli/cmd/federatedrole"
 	"github.com/openshift/osd-utils-cli/cmd/network"
+	"github.com/openshift/osd-utils-cli/cmd/servicelog"
 )
 
 // GitCommit is the short git commit hash from the environment
@@ -62,6 +63,7 @@ func NewCmdRoot(streams genericclioptions.IOStreams) *cobra.Command {
 	rootCmd.AddCommand(clusterdeployment.NewCmdClusterDeployment(streams, kubeFlags))
 	rootCmd.AddCommand(federatedrole.NewCmdFederatedRole(streams, kubeFlags))
 	rootCmd.AddCommand(network.NewCmdNetwork(streams, kubeFlags))
+	rootCmd.AddCommand(servicelog.NewCmdServiceLog(streams, kubeFlags))
 	rootCmd.AddCommand(newCmdMetrics(streams, kubeFlags))
 
 	// add docs command
