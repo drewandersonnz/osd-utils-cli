@@ -1,7 +1,10 @@
 package servicelog
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+	"os"
 
 	"github.com/spf13/cobra"
 
@@ -41,12 +44,45 @@ func newPostOptions(streams genericclioptions.IOStreams, flags *genericclioption
 	}
 }
 
+// PostMessage for receiving inbound messages
+type PostMessage struct {
+	ClusterUUID  string `json:"cluster_uuid"`
+	Description  string `json:"description"`
+	InternalOnly bool   `json:"internal_only"`
+	Kind         string `json:"kind"`
+	ServiceName  string `json:"service_name"`
+	Severity     string `json:"severity"`
+	Summary      string `json:"summary"`
+}
+
 func (o *postOptions) validate(cmd *cobra.Command) error {
 	return nil
 }
 
 func (o *postOptions) run() error {
-	fmt.Fprintf(o.IOStreams.Out, "Hi\n\n")
+	var message PostMessage
+
+	decoded := json.NewDecoder(os.Stdin)
+	for {
+		err := decoded.Decode(&message)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
+
+		if err := o.postMessage(message); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (o *postOptions) postMessage(message PostMessage) error {
+	fmt.Fprintf(o.IOStreams.Out, message.ClusterUUID)
+	fmt.Fprintf(o.IOStreams.Out, "\n\n")
 
 	return nil
 }
