@@ -81,7 +81,13 @@ func (o *postOptions) run() error {
 }
 
 func (o *postOptions) postMessage(message PostMessage) error {
-	fmt.Fprintf(o.IOStreams.Out, message.ClusterUUID)
+
+	jMessage, err := json.Marshal(message)
+	if err != nil {
+		return err
+	}
+
+	fmt.Fprintf(o.IOStreams.Out, string(jMessage))
 	fmt.Fprintf(o.IOStreams.Out, "\n\n")
 
 	return nil
